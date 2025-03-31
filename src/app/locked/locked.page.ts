@@ -11,18 +11,20 @@ import { NativeBiometric } from 'capacitor-native-biometric';
 })
 export class LockedPage implements OnInit {
   showFallback = true;
-  password = '1234';
+  password = '';
   hasBiometricAuth = false;
   constructor(private modalCtrl: ModalController) {}
 
   async ngOnInit() {
-    if (Capacitor.isNativePlatform()) {
+    //if (Capacitor.isNativePlatform()) {
       const available = await NativeBiometric.isAvailable();
       this.hasBiometricAuth = available.isAvailable;
       if (this.hasBiometricAuth) {
         this.openBiometricAuth();
+      } else {
+        console.log('Biometric authentication not available');
       }
-    }
+   // }
   }
 
   async openBiometricAuth() {
@@ -32,6 +34,7 @@ export class LockedPage implements OnInit {
         title: 'your session has timed out',
         subtitle: 'Use your biometric credential to unlock the app',
       });
+      console.log("Authenticated!");
       this.modalCtrl.dismiss({ reset: true });
     } catch (error) {
       console.error('Biometric authentication failed', error);

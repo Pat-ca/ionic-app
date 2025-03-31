@@ -5,7 +5,9 @@
 
 ion-input {
     background-color: #efecef;
+    color: blue;
     border-radius: 20px;
     --padding-start: 20px;
     padding: var(--padding-start);
+    height: 60px;
 }
