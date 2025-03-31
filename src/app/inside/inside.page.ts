@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AccessService } from '../access.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-inside',
@@ -7,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
   standalone: false
 })
 export class InsidePage implements OnInit {
-
-  constructor() { }
+  logoutTimer! : Observable<number>;
+  constructor(private accessService: AccessService) { }
 
   ngOnInit() {
+    this.logoutTimer = this.accessService.logoutTimer.asObservable();
   }
 
+  ionViewDidEnter() {
+    this.accessService.resetLogoutTimer();
+  }
 }
