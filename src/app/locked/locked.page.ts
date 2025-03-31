@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-// import { BiometricAuth } from 'capacitor-biometric-auth';
 import { ModalController } from '@ionic/angular';
+import { NativeBiometric } from 'capacitor-native-biometric';
 
 @Component({
   selector: 'app-locked',
@@ -15,20 +15,24 @@ export class LockedPage implements OnInit {
   constructor(private modalCtrl: ModalController) {}
 
   async ngOnInit() {
-    // const available = await BiometricAuth.isAvailable();
-    // this.hasBiometricAuth = available.has;
-    // if (this.hasBiometricAuth) {
-    //   this.openBiometricAuth();
-    // }
+    const available = await NativeBiometric.isAvailable();
+    this.hasBiometricAuth = available.isAvailable;
+    if (this.hasBiometricAuth) {
+      this.openBiometricAuth();
+    }
   }
 
   async openBiometricAuth() {
-    // const result = await BiometricAuth.verify({
-    //   reason: 'Please authenticate to unlock the app',
-    // });
-    // if(result.verified) {
-    //   this.modalCtrl.dismiss({ reset: true });
-    // }
+    try {
+      await NativeBiometric.verifyIdentity({
+        reason: 'your session has timed out',
+        title: 'your session has timed out',
+        subtitle: 'Use your biometric credential to unlock the app',
+      });
+      this.modalCtrl.dismiss({ reset: true });
+    } catch (error) {
+      console.error('Biometric authentication failed', error);
+    }
   }
 
   unlock() {
