@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 import { NativeBiometric } from 'capacitor-native-biometric';
 
@@ -15,10 +16,12 @@ export class LockedPage implements OnInit {
   constructor(private modalCtrl: ModalController) {}
 
   async ngOnInit() {
-    const available = await NativeBiometric.isAvailable();
-    this.hasBiometricAuth = available.isAvailable;
-    if (this.hasBiometricAuth) {
-      this.openBiometricAuth();
+    if (Capacitor.isNativePlatform()) {
+      const available = await NativeBiometric.isAvailable();
+      this.hasBiometricAuth = available.isAvailable;
+      if (this.hasBiometricAuth) {
+        this.openBiometricAuth();
+      }
     }
   }
 
